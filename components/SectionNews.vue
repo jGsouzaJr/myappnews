@@ -10,8 +10,8 @@
       </div> 
     </div>      
     <div v-if="loading" class="loading-message">Carregando...</div>
-    <!-- <div v-if="reachedLimit" class="loading-message">Fim da lista</div>      -->
     
+    <div v-if="reachedLimit" class="loading-message">Fim da lista</div>     
   </section>
 
     
@@ -26,10 +26,10 @@ export default {
     return {
       items: [],
       page: 1,
-      loading: false,     
-      // items2:[],
-      // reachedLimit: false,
-      // maxItems: 15,
+      loading: false,
+      lastPage: '',   
+      reachedLimit: false, // novo
+      maxItems: 16, // novo
     };
   },
   async mounted() {
@@ -41,30 +41,53 @@ export default {
   },
   methods: {
     async carregarMais() {
-      if (this.loading) return; 
+      if (this.loading || this.reachedLimit ) return;  // novo reachedLimit
 
       this.loading = true;
-      const response = await axios.get(`https://www.megasistema.app.br/api/diario-fm/news?page=${this.page}`);   
+      const response = await axios.get(`https://www.megasistema.app.br/api/diario-fm/news?page=${this.page}`); 
+      const newItems = response.data.data  // novo
+      this.lastPage = response.data.last_page;
       
-      this.items = this.items.concat(response.data.data);
-      this.page++; 
-      this.loading = false;     
+      // novo
+      if(this.items + newItems.length >= this.maxItems){
+        this.reachedLimit = true;
+        console.log('estou na função', newItems, 'sou o items', this.items)
+      } else {  
+        this.items = this.items.concat(response.data.data);
+        this.page++;
+        
+
+      }
+
+      this.loading = false; // novo
+      //fim
+
+
+      // this.items = this.items.concat(response.data.data);
+      // this.page++; 
+      // this.loading = false;     
      
     }, 
     
-    handleScroll(){  
-      
+    handleScroll(){ 
+
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
-      const contentHeight = document.body.offsetHeight;
+      const contentHeight = document.body.offsetHeight;     
 
-      if (scrollY + windowHeight >= contentHeight - 100) {
-        this.carregarMais()  
+      if (scrollY + windowHeight >= contentHeight - 100) {   
+        
+        if(this.page >= this.lastPage){
+          this.carregarMais();          
+          this.loading = false;                
+        } 
+        
       }
+
     }
     
   },
-  
+  computed:{ },  
 };
 
 </script>
