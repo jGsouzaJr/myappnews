@@ -29,7 +29,7 @@ export default {
       loading: false,
       lastPage: '',   
       reachedLimit: false, // novo
-      maxItems: 16, // novo
+      maxItems: 0, // novo
     };
   },
   async mounted() {
@@ -45,19 +45,20 @@ export default {
 
       this.loading = true;
       const response = await axios.get(`https://www.megasistema.app.br/api/diario-fm/news?page=${this.page}`); 
-      const newItems = response.data.data  // novo
+      const newItems = response.data.data;  // novo
+      this.maxItems = response.per_page;
       this.lastPage = response.data.last_page;
       
       // novo
       if(this.items + newItems.length >= this.maxItems){
         this.reachedLimit = true;
-        console.log('estou na função', newItems, 'sou o items', this.items)
+       
       } else {  
         this.items = this.items.concat(response.data.data);
         this.page++;
-        
+      };
 
-      }
+      // console.log(this.items)
 
       this.loading = false; // novo
       //fim
@@ -76,15 +77,21 @@ export default {
       const contentHeight = document.body.offsetHeight;     
 
       if (scrollY + windowHeight >= contentHeight - 100) {   
-        
-        if(this.page >= this.lastPage){
+       
+        if(this.page <= this.lastPage){
           this.carregarMais();          
-          this.loading = false;                
-        } 
+          // this.loading = false;
+          console.log('sou menor e igual', this.page);
+          
+        } else if (this.page > this.lastPage){
+            const parei = undefined;
+            return parei;
+            console.log('sou maior', this.lastPage);               
+        }
         
-      }
+      };
 
-    }
+    },
     
   },
   computed:{ },  

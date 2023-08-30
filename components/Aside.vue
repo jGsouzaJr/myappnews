@@ -6,7 +6,7 @@
       <img src="https://via.placeholder.com/30" alt="">
     </div>
     <p>Nunca estarei pronto, mas irei assim mesmo!</p>
-    <h3>Mais texto</h3>
+    <!-- <h3>Mais texto</h3>
     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. In, doloribus consequatur autem esse voluptatem dignissimos, reprehenderit sint illo nihil minus fuga. A dolorum exercitationem sint porro ipsam modi atque quam.</p>
 
     <div >
@@ -19,7 +19,7 @@
     <br>
     <div >
       <img src="https://via.placeholder.com/30" alt="" class='fade'>
-    </div>
+    </div> -->
 
   </aside>
 </template>
