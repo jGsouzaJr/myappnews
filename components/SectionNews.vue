@@ -28,8 +28,8 @@ export default {
       page: 1,
       loading: false,
       lastPage: '',   
-      reachedLimit: false, // novo
-      maxItems: 0, // novo
+      reachedLimit: false, 
+      maxItems: 0, 
     };
   },
   async mounted() {
@@ -41,33 +41,24 @@ export default {
   },
   methods: {
     async carregarMais() {
-      if (this.loading || this.reachedLimit ) return;  // novo reachedLimit
-
+      if (this.loading || this.reachedLimit ) return; 
       this.loading = true;
       const response = await axios.get(`https://www.megasistema.app.br/api/diario-fm/news?page=${this.page}`); 
-      const newItems = response.data.data;  // novo
+      
+      const newItems = response.data.data;  // novo      
       this.maxItems = response.per_page;
       this.lastPage = response.data.last_page;
-      
-      // novo
-      if(this.items + newItems.length >= this.maxItems){
+      const soma = this.items + newItems.length;
+    
+      if(soma >= this.maxItems){
         this.reachedLimit = true;
-       
       } else {  
         this.items = this.items.concat(response.data.data);
-        this.page++;
-      };
+        this.page++;        
+      }; 
 
-      // console.log(this.items)
-
-      this.loading = false; // novo
-      //fim
-
-
-      // this.items = this.items.concat(response.data.data);
-      // this.page++; 
-      // this.loading = false;     
-     
+      this.loading = false; 
+          
     }, 
     
     handleScroll(){ 
@@ -79,14 +70,7 @@ export default {
       if (scrollY + windowHeight >= contentHeight - 100) {   
        
         if(this.page <= this.lastPage){
-          this.carregarMais();          
-          // this.loading = false;
-          console.log('sou menor e igual', this.page);
-          
-        } else if (this.page > this.lastPage){
-            const parei = undefined;
-            return parei;
-            console.log('sou maior', this.lastPage);               
+          this.carregarMais();      
         }
         
       };
@@ -94,7 +78,7 @@ export default {
     },
     
   },
-  computed:{ },  
+   
 };
 
 </script>
